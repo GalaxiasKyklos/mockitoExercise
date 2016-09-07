@@ -3,8 +3,6 @@ package mx.iteso;
 import static org.junit.Assert.*;
 import org.junit.*;
 
-import javax.sql.rowset.spi.SyncResolver;
-
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
@@ -52,6 +50,27 @@ public class TacitKnowledgePrinterTest {
         when(tacitPrinter.calculate(0)).thenThrow(new RuntimeException("limit must be >= 1"));
     }
 
-    
+    @Test
+    public void testDiv3() {
+        TacitKnowledgePrinter tacitPrinter = new TacitKnowledgePrinter(printer);
+        assertEquals(tacitPrinter.calculate(3), "Tacit");
+    }
 
+    @Test
+    public void testDiv5() {
+        TacitKnowledgePrinter tacitPrinter = new TacitKnowledgePrinter(printer);
+        assertEquals(tacitPrinter.calculate(5), "Knowledge");
+    }
+
+    @Test
+    public void testDiv3and5() {
+        TacitKnowledgePrinter tacitPrinter = new TacitKnowledgePrinter(printer);
+        assertEquals(tacitPrinter.calculate(15), "TacitKnowledge");
+    }
+
+    @Test
+    public void testNonDiv3or5() {
+        TacitKnowledgePrinter tacitPrinter = new TacitKnowledgePrinter(printer);
+        assertEquals(tacitPrinter.calculate(4), "4");
+    }
 }
