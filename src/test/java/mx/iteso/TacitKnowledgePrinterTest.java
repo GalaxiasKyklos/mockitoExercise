@@ -2,11 +2,11 @@ package mx.iteso;
 
 import static org.junit.Assert.*;
 import org.junit.*;
+
+import javax.sql.rowset.spi.SyncResolver;
+
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
-import mx.iteso.Printer;
-import org.junit.rules.ExpectedException;
-import org.mockito.internal.matchers.Any;
-import org.omg.CORBA.AnySeqHelper;
 
 public class TacitKnowledgePrinterTest {
 
@@ -24,19 +24,34 @@ public class TacitKnowledgePrinterTest {
     @Before
     public void setUp() {
         printer = mock(Printer.class);
-        when(printer.print(anyString())).thenReturn(anyString());
+        when(printer.print(anyString())).then(returnsFirstArg());
     }
 
     @Test
-    public void testTenTimes() {
+    public void testTenTimesCalled() {
         TacitKnowledgePrinter tacitPrinter = new TacitKnowledgePrinter(printer);
         tacitPrinter.printNumbers(10);
         verify(printer, times(10)).print(anyString());
     }
 
-    @Test (expected = RuntimeException.class)
-    public void testZeroException() {
+    @Test
+    public void testTenTimesResult() {
         TacitKnowledgePrinter tacitPrinter = new TacitKnowledgePrinter(printer);
-        tacitPrinter.printNumbers(0);
+        assertEquals(tacitPrinter.printNumbers(10), "12Tacit4KnowledgeTacit78TacitKnowledge");
     }
+
+    @Test
+    public void test15TimesResult() {
+        TacitKnowledgePrinter tacitPrinter = new TacitKnowledgePrinter(printer);
+        assertEquals(tacitPrinter.printNumbers(15), "12Tacit4KnowledgeTacit78TacitKnowledge11Tacit1314TacitKnowledge");
+    }
+
+    @Test (expected = RuntimeException.class)
+    public void testZeroException()  {
+        TacitKnowledgePrinter tacitPrinter = new TacitKnowledgePrinter(printer);
+        when(tacitPrinter.calculate(0)).thenThrow(new RuntimeException("limit must be >= 1"));
+    }
+
+    
+
 }

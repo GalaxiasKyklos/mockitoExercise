@@ -12,18 +12,19 @@ public class TacitKnowledgePrinter {
     private static final int FIVE = 5;
     private static final int THREE = 3;
 
-    public void printNumbers(int limit) {
+    public String printNumbers(int limit) {
         if (limit < 1) {
             throw new RuntimeException("limit must be >= 1");
         }
-
+        String ret = "";
         for (int i = 1; i <= limit; i++) {
             try {
-                printer.print(calculate(i));
+                ret += printer.print(calculate(i));
             } catch (Exception e) {
                 continue;
             }
         }
+        return ret;
     }
 
     public String calculate(int number) {
